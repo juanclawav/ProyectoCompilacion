@@ -1,0 +1,119 @@
+grammar upb.lp.edu.Madonna with org.eclipse.xtext.common.Terminals
+
+generate madonna "http://www.lp.upb/edu/Madonna"
+
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+Programa:
+    'Composicion' name=ID 
+    (prog+=Instrucciones)*
+;
+
+
+Print:
+    printTipo=('Melodia' | 'MelodiaLineal') '(' (val=Valor) ')'
+;
+
+Instrucciones:
+    (Declaracion | Valor)
+;
+
+Llave:
+    ('Llave' '(' exprLogCondicion=(Expresion)')' acordeRes = Expresion)
+    ('Reproduce' Rep = Expresion)
+;
+
+LlamadoFunc:
+    funcionID=[Declaracion] '(' (args+=(Valor) )? ')' 
+;
+
+
+Declaracion:
+    (AsignacionNota | AsignacionMelodia | AsignacionSubNota | AsignacionRitmo |  Funcion | Param | Print)
+;
+
+Funcion:
+    'Seccion' name=ID ('Usa' '(' param+=Param ')' )? 
+    (declar+=(Declaracion))*
+    (val=(Valor))
+;
+
+AsignacionNota:
+	name=ID val=[Nota]
+;
+AsignacionMelodia:
+	name=ID val=[Melodia]
+;
+AsignacionSubNota:
+	name=ID val=[SubNota]
+;
+AsignacionRitmo:
+	name=ID val=[Ritmo]
+;
+
+Param:
+   Primitivo name=ID 
+;
+
+Constante:
+    nombre=[Declaracion]
+;
+
+
+Valor:
+    (Expresion)
+;
+
+
+Expresion:
+    ExprConcatenacion | ExprAritmetica | ExprLogica | LlamadoFunc | Llave| Constante
+;
+
+
+ExprConcatenacion:
+    '('(operadorCon = ('++') (exprCon+=(Expresion))+) ')' |  Melodia
+;
+
+
+ExprAritmetica:
+    '('(operadorAr = ('+' | '-' | '/' | '*' | '%')  (exprAr+=(Expresion))+) ')' |  (Nota | SubNota)
+;
+
+
+ExprLogica:
+   (Negado ?= '!')? exprLog=(ExprLogicaOperadores | Ritmo | ExprComparacion )
+;
+
+ExprLogicaOperadores:
+    (('('(operadorLog = ( '&&' | '||' ) (exprLogs+=(Expresion))+) ')' ))
+;
+
+ExprComparacion:
+    '('(operadorComp = ('<' | '>' | '<=' | '>=' | '==' | '~=') exprComIzq=(Expresion) exprComDer=(Expresion)) ')'
+;
+
+Primitivo:
+    tipo = ('Melodia' |  'Nota' | 'SubNota' | 'Ritmo')
+;
+
+
+Nota: 
+    x = INT
+;
+
+Melodia: 
+    x = STRING
+;
+
+SubNota:
+    x = Double
+;
+
+Double returns ecore::EDouble:
+    INT '.' INT
+;
+
+Ritmo:
+    x = ('Cuarto' | 'Octavo')
+;

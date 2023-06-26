@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: madonna
+Bundle-ManifestVersion: 2
+Bundle-Name: madonna
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: madonna; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.16.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtext.util,
+ org.eclipse.emf.common
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Export-Package: upb.lp.edu.scoping,
+ upb.lp.edu.generator,
+ upb.lp.edu.madonna.util,
+ upb.lp.edu.validation,
+ upb.lp.edu.services,
+ upb.lp.edu,
+ upb.lp.edu.madonna,
+ upb.lp.edu.serializer,
+ upb.lp.edu.madonna.impl
+Import-Package: org.apache.log4j
